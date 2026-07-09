@@ -10,8 +10,6 @@
 # if the pings get noisy.
 set -u
 
-echo "[$(date '+%H:%M:%S')] stop-hook FIRED TERM_PROGRAM=${TERM_PROGRAM:-unset}" >> /tmp/my-plug-debug.log
-
 [ "${TERM_PROGRAM:-}" = "ghostty" ] || exit 0
 # tmux/screen swallow OSC 9
 [ -n "${TMUX:-}" ] && exit 0
@@ -23,9 +21,11 @@ RAW=$(cat)
 MSG="Done"
 TP=$(printf '%s' "$RAW" | jq -r '.transcript_path // empty' 2>/dev/null)
 if [ -n "${TP:-}" ] && [ -f "$TP" ]; then
-  LAST=$(jq -rs '
+  # tail only — transcripts can be 100MB+; slurping the whole file blows the
+  # hook timeout. Last 200 lines is plenty to catch the final assistant text.
+  LAST=$(tail -n 200 "$TP" 2>/dev/null | jq -rs '
     map(select(.type=="assistant") | .message.content[]? | select(.type=="text") | .text)
-    | last // empty' "$TP" 2>/dev/null | head -1)
+    | last // empty' 2>/dev/null | head -1)
   [ -n "${LAST:-}" ] && MSG=$(printf '%s' "$LAST" | cut -c1-100)
 fi
 
@@ -48,8 +48,7 @@ find_tty() {
   return 1
 }
 
-TTY=$(find_tty) || { echo "[$(date '+%H:%M:%S')] no tty resolved — skip" >> /tmp/my-plug-debug.log; exit 0; }
-echo "[$(date '+%H:%M:%S')] tty=$TTY emitting OSC9" >> /tmp/my-plug-debug.log
+TTY=$(find_tty) || exit 0
 
 # Strip control chars (guards against OSC-injection from the message body).
 CLEAN=$(printf '%s' "Claude Code: $MSG" | tr -d '\000-\037\177')
