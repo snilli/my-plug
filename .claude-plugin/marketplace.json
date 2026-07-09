@@ -1,0 +1,11 @@
+{
+  "name": "my-plug",
+  "owner": { "name": "snilli" },
+  "plugins": [
+    {
+      "name": "ghostty-stop-notify",
+      "source": "./",
+      "description": "Native Ghostty desktop notification on Stop (OSC 9) — click focuses the Ghostty tab."
+    }
+  ]
+}

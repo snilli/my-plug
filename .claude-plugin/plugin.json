@@ -1,0 +1,20 @@
+{
+  "name": "ghostty-stop-notify",
+  "version": "0.1.0",
+  "description": "Native Ghostty desktop notification on Stop via OSC 9 — clicking focuses the Ghostty tab instead of Script Editor.",
+  "author": { "name": "snilli" },
+  "keywords": ["ghostty", "notification", "macos", "osc9", "stop-hook"],
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/ghostty-stop-notify.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
