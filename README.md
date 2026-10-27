@@ -54,4 +54,25 @@ notification. Add to `~/.claude/settings.json` (or export in your shell profile)
   marketplace.json   # lets `/plugin marketplace add <path>` find it
 hooks/
   ghostty-stop-notify.sh
+plugins/update-all/  # second plugin, see below
 ```
+
+# update-all
+
+A skill that updates everything a Claude Code setup depends on, in one run, and reports what
+changed. Install with `/plugin install update-all@my-plug`, then ask "update everything"
+(or "อัปเดต plugin ทุกตัว"). Or run the script directly:
+
+```
+bash plugins/update-all/scripts/update-all.sh [plugins|skills|tools]
+```
+
+| Section | What it updates |
+|---|---|
+| plugins | every installed Claude Code plugin (`claude plugin marketplace update` + `claude plugin update`) |
+| skills | skills installed with the `skills` CLI (`bunx skills update -g -y`) |
+| tools | brew CLIs the skills call (`BREW_TOOLS`: rtk, jira-cli, bitbucket-cli, gh, uv, bun, aws-sam-cli, mysql-client, redis, ollama, jq), Claude Code (`BREW_CASKS`), global bun packages (`bun update -g --latest`), uv tools (`uv tool upgrade --all`) |
+
+It deletes nothing: skills removed upstream are listed for you to remove. AnythingLLM and Ollama
+models are not touched. MCP servers started with `bunx` update themselves when their config uses
+`@latest` (for example `bunx cachebro@latest serve`); the script does not touch them.

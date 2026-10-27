@@ -6,6 +6,11 @@
       "name": "ghostty-stop-notify",
       "source": "./",
       "description": "Native Ghostty desktop notification on Stop (OSC 9) — click focuses the Ghostty tab."
+    },
+    {
+      "name": "update-all",
+      "source": "./plugins/update-all",
+      "description": "Update every Claude Code plugin, skills CLI skill, and the CLIs they call (rtk, jira-cli, bkt, Claude Code, bun globals, uv tools)."
     }
   ]
 }

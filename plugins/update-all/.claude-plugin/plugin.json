@@ -1,0 +1,7 @@
+{
+  "name": "update-all",
+  "version": "0.1.0",
+  "description": "Update every installed Claude Code plugin and every skill installed with the `skills` CLI, then report what changed.",
+  "author": { "name": "snilli" },
+  "keywords": ["update", "plugins", "skills", "maintenance"]
+}
