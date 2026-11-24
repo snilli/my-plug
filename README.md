@@ -1,36 +1,42 @@
-# ghostty-stop-notify
+# my-plug
 
-A Claude Code plugin that fires a **native Ghostty desktop notification** every time
-Claude finishes responding (the `Stop` event). Because the notification is delivered
-via an **OSC 9** escape sequence written to the terminal, **Ghostty owns it** — so
-clicking the notification focuses the Ghostty tab, *not* Script Editor.
+snilli's Claude Code plugin. One plugin, `my-plug`, from the marketplace `snilli`:
 
-## Why
-
-On macOS, notifications sent with `osascript -e 'display notification'` are owned by
-Script Editor, so clicking one launches Script Editor. Tools that fall back to
-`osascript` under non-iTerm2 terminals (e.g. ECC's `stop:desktop-notify`) hit this.
-This plugin uses the terminal-native OSC 9 path that Ghostty renders itself.
-
-## Requirements
-
-- macOS + [Ghostty](https://ghostty.org) (`TERM_PROGRAM=ghostty`)
-- `jq` (for reading the transcript summary; optional — falls back to "Done")
+| Part | What it does |
+|---|---|
+| Ghostty Stop notification (hook) | A native Ghostty desktop notification every time Claude finishes responding |
+| `/my-plug:update-all` (skill) | Updates every plugin, skills CLI skill and the CLIs they call, then reports what changed |
 
 ## Install
 
 ```
-/plugin marketplace add /Users/snilli/Projects/hobby/my-plug
-/plugin install ghostty-stop-notify@my-plug
+/plugin marketplace add snilli/my-plug
+/plugin install my-plug@snilli
 ```
 
 Then **fully restart** Claude Code (quit and run `claude` fresh — not `--continue`)
-so the plugin's hooks register.
+so the plugin's hooks register. For local development, add the checkout instead:
+`/plugin marketplace add /Users/snilli/Projects/hobby/my-plug`.
 
-Moving to a new machine: push this repo to git, then on the other machine
-`/plugin marketplace add <git-url>` + `/plugin install ghostty-stop-notify@my-plug`.
+## Ghostty Stop notification
 
-## If you use ECC
+Fires a **native Ghostty desktop notification** on the `Stop` event. Because the
+notification is delivered via an **OSC 9** escape sequence written to the terminal,
+**Ghostty owns it** — so clicking the notification focuses the Ghostty tab, *not* Script Editor.
+
+### Why
+
+On macOS, notifications sent with `osascript -e 'display notification'` are owned by
+Script Editor, so clicking one launches Script Editor. Tools that fall back to
+`osascript` under non-iTerm2 terminals (e.g. ECC's `stop:desktop-notify`) hit this.
+This hook uses the terminal-native OSC 9 path that Ghostty renders itself.
+
+### Requirements
+
+- macOS + [Ghostty](https://ghostty.org) (`TERM_PROGRAM=ghostty`)
+- `jq` (for reading the transcript summary; optional — falls back to "Done")
+
+### If you use ECC
 
 ECC ships its own `stop:desktop-notify` hook that falls back to osascript under
 Ghostty (→ Script Editor). Disable it so you don't get a duplicate, wrong-owner
@@ -40,31 +46,20 @@ notification. Add to `~/.claude/settings.json` (or export in your shell profile)
 "env": { "ECC_DISABLED_HOOKS": "stop:desktop-notify" }
 ```
 
-## Behavior
+### Behavior
 
 - Fires on every `Stop`. No frontmost-suppression or dedup (yet).
 - Body = first line of Claude's last message (truncated to 100 chars), else "Done".
 - Skips silently when not under Ghostty, or inside tmux/screen (they swallow OSC 9).
 
-## Layout
+## update-all
+
+Updates everything a Claude Code setup depends on, in one run, and reports what changed.
+Run `/my-plug:update-all`, or ask "update everything" (or "อัปเดต plugin ทุกตัว"). Or run the
+script directly:
 
 ```
-.claude-plugin/
-  plugin.json        # manifest + inline Stop hook
-  marketplace.json   # lets `/plugin marketplace add <path>` find it
-hooks/
-  ghostty-stop-notify.sh
-plugins/update-all/  # second plugin, see below
-```
-
-# update-all
-
-A skill that updates everything a Claude Code setup depends on, in one run, and reports what
-changed. Install with `/plugin install update-all@my-plug`, then ask "update everything"
-(or "อัปเดต plugin ทุกตัว"). Or run the script directly:
-
-```
-bash plugins/update-all/scripts/update-all.sh [plugins|skills|tools]
+bash plugins/my-plug/scripts/update-all.sh [plugins|skills|tools|sources]
 ```
 
 | Section | What it updates |
@@ -76,3 +71,17 @@ bash plugins/update-all/scripts/update-all.sh [plugins|skills|tools]
 It deletes nothing: skills removed upstream are listed for you to remove. AnythingLLM and Ollama
 models are not touched. MCP servers started with `bunx` update themselves when their config uses
 `@latest` (for example `bunx cachebro@latest serve`); the script does not touch them.
+
+## Layout
+
+```
+.claude-plugin/
+  marketplace.json         # marketplace "snilli": lists the one plugin below
+plugins/my-plug/
+  .claude-plugin/plugin.json
+  hooks/hooks.json         # Stop → hooks/ghostty-stop-notify.sh
+  hooks/ghostty-stop-notify.sh
+  skills/update-all/SKILL.md
+  scripts/update-all.sh
+  SOURCES.md               # snapshot of where every plugin/skill comes from
+```

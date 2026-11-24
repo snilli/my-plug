@@ -1,0 +1,7 @@
+{
+  "name": "my-plug",
+  "version": "0.2.0",
+  "description": "snilli's Claude Code setup: a native Ghostty notification on Stop (OSC 9) and /my-plug:update-all, which updates every plugin, skills CLI skill and tool, then reports what changed.",
+  "author": { "name": "snilli" },
+  "keywords": ["ghostty", "notification", "osc9", "stop-hook", "update", "plugins", "skills", "maintenance"]
+}

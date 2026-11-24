@@ -3,7 +3,7 @@
 Snapshot of 2026-10-27. Regenerate the live list with:
 
 ```
-bash plugins/update-all/scripts/update-all.sh sources
+bash plugins/my-plug/scripts/update-all.sh sources
 ```
 
 ## Plugin marketplaces (`claude plugin`)
@@ -14,7 +14,7 @@ bash plugins/update-all/scripts/update-all.sh sources
 | `anthropic-plugin-directory` | built into Claude Code | `typescript-native-lsp` |
 | `ecc` | `github.com/affaan-m/ECC` | `ecc` (293 skills, 94 commands) |
 | `ez-plugin` | `snilli/ez-plugin` | `ez` |
-| `my-plug` | `snilli/my-plug` | `ghostty-stop-notify`, `update-all` |
+| `snilli` | `snilli/my-plug` | `my-plug` (Ghostty Stop hook + skill `update-all`) |
 | `ponytail` | `DietrichGebert/ponytail` | `ponytail` |
 | `ui-ux-pro-max-skill` | `nextlevelbuilder/ui-ux-pro-max-skill` | `ui-ux-pro-max` |
 | `claude-powerline` | `Owloops/claude-powerline` | `claude-powerline` |
@@ -48,7 +48,7 @@ On Windows the updater touches only these (`WIN_MARKETPLACES`, `WIN_SKILL_SOURCE
 
 | Kind | Kept on Windows |
 |---|---|
-| Plugin marketplaces | `claude-plugins-official` (incl. `mattpocock-skills`), `anthropic-plugin-directory`, `ecc`, `my-plug`, `ponytail`, `answer-me-with-html` |
+| Plugin marketplaces | `claude-plugins-official` (incl. `mattpocock-skills`), `anthropic-plugin-directory`, `ecc`, `snilli`, `ponytail`, `answer-me-with-html` |
 | skills CLI | `tt-a1i/archify` |
 | scoop tools | `rtk`, `bun` |
 | MCP | `cachebro` (`bunx cachebro@latest serve`, updates itself) |

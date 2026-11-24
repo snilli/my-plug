@@ -17,7 +17,7 @@ set -uo pipefail
 BREW_TOOLS=(rtk jira-cli bitbucket-cli gh uv bun aws-sam-cli mysql-client redis ollama jq)
 BREW_CASKS=(claude-code@latest)
 # Windows profile: only these are updated on Windows; everything else installed there is skipped.
-WIN_MARKETPLACES=(claude-plugins-official anthropic-plugin-directory ecc my-plug ponytail answer-me-with-html)
+WIN_MARKETPLACES=(claude-plugins-official anthropic-plugin-directory ecc snilli ponytail answer-me-with-html)
 WIN_SKILL_SOURCES=(tt-a1i/archify)
 SCOOP_TOOLS=(rtk bun)                               # Windows: scoop only (no winget)
 
